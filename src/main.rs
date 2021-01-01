@@ -1,9 +1,11 @@
 mod enums;
 mod macros;
 // mod from_iters;
-// mod sierpinski;
+mod num_fmt;
+mod sierpinski;
 
 use enums::*;
+use num_fmt::*;
 
 #[allow(unused)]
 fn main() {
@@ -17,6 +19,8 @@ fn main() {
 
     // from_iters::play_with_from_iter();
 
-    let foo = FBB::Foo;
-    printf!(foo);
+    // let foo = FBB::Foo;
+    // printf!(foo);
+
+    num_fmt();
 }
