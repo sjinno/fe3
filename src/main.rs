@@ -3,9 +3,11 @@ mod macros;
 // mod from_iters;
 mod num_fmt;
 mod sierpinski;
+mod threads;
 
 use enums::*;
 use num_fmt::*;
+use threads::*;
 
 #[allow(unused)]
 fn main() {
@@ -22,5 +24,7 @@ fn main() {
     // let foo = FBB::Foo;
     // printf!(foo);
 
-    num_fmt();
+    // num_fmt("12213123.435");
+
+    thread1();
 }
