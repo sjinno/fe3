@@ -4,3 +4,5 @@ macro_rules! printf {
         println!("{:#?}", $v);
     };
 }
+
+fn main() {}

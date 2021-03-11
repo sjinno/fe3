@@ -39,3 +39,5 @@ pub fn sierpinski(n: i32, rate: u64) {
     // print!("\x1B[2J");
     // print!("{}[2J", 27 as char);
 }
+
+fn main() {}

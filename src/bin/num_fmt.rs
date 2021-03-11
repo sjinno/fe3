@@ -28,3 +28,5 @@ pub fn num_fmt(num: &str) {
     // fmt.push_str(split[1]);
     // println!("{:#?}", fmt);
 }
+
+fn main() {}

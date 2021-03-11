@@ -5,3 +5,5 @@ pub enum FBB {
     Bar,
     Baz,
 }
+
+fn main() {}

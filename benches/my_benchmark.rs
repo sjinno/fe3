@@ -15,24 +15,25 @@ use criterion::{black_box, criterion_group, criterion_main, Criterion};
 //     c.bench_function("format!(\"{}\", \"Hello, world!\")", |b| b.iter(|| black_box(format!("{}", "Hello, world!"))));
 // }
 
-// pub fn criterion_benchmark(c: &mut Criterion) {
-//     c.bench_function("&str to String", |b| b.iter(|| {
-//         let s = black_box("Hello, world!");
-//         let s1 = black_box(s.to_string());
-//         black_box(s1);
-//     }));
-//     c.bench_function("String to &str", |b| b.iter(|| {
-//         let s = black_box(String::from("Hello, world!"));
-//         let s1 = black_box(s.as_str());
-//         black_box(s1);
-//     }));
-// }
-
 pub fn criterion_benchmark(c: &mut Criterion) {
-    c.bench_function("Vec::new()", |b| b.iter(|| black_box(Vec::<usize>::new())));
-    c.bench_function("Vec::defualt()", |b| b.iter(|| black_box(Vec::<usize>::default())));
-    // c.bench_function("vec![]", |b| b.iter(|| black_box(vec![])));
+    c.bench_function("&str to String", |b| b.iter(|| {
+        let s = black_box("Hello, world!");
+        let s1 = black_box(s.to_string());
+        black_box(s1);
+    }));
+    c.bench_function("String to &str", |b| b.iter(|| {
+        let s = black_box(String::from("Hello, world!"));
+        let s1 = black_box(s.as_str());
+        black_box(s1);
+    }));
 }
+
+
+// pub fn criterion_benchmark(c: &mut Criterion) {
+//     c.bench_function("Vec::new()", |b| b.iter(|| black_box(Vec::<usize>::new())));
+//     c.bench_function("Vec::defualt()", |b| b.iter(|| black_box(Vec::<usize>::default())));
+//     // c.bench_function("vec![]", |b| b.iter(|| black_box(vec![])));
+// }
 
 criterion_group!(benches, criterion_benchmark);
 criterion_main!(benches);

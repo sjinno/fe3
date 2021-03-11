@@ -38,3 +38,5 @@ fn change_values_in_v(v: &mut Vec<Vec<usize>>) {
     v.into_iter()
         .for_each(|row| row.into_iter().for_each(|col| *col += 1));
 }
+
+fn main() {}

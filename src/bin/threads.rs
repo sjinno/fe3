@@ -16,3 +16,5 @@ pub fn thread1() {
 
     t.join().unwrap();
 }
+
+fn main() {}
