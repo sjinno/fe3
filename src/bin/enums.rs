@@ -6,7 +6,7 @@ enum Fbb {
 
 fn main() {
     let foo: Fbb = Fbb::Foo;
-    
+
     match foo {
         Fbb::Foo => println!("I'm Foo!"),
         Fbb::Bar => println!("I'm Bar!"),

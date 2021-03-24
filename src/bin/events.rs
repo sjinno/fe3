@@ -1,16 +1,8 @@
 use std::fmt;
 use std::io::{stdin, stdout, Write};
 
-
 use rand::{thread_rng, Rng};
-use termion::{
-    event::Key,
-    input::TermRead,
-    raw::IntoRawMode,
-    clear,
-    cursor,
-};
-
+use termion::{clear, cursor, event::Key, input::TermRead, raw::IntoRawMode};
 
 #[derive(Clone)]
 enum Square {
@@ -23,8 +15,8 @@ enum Square {
 impl fmt::Display for Square {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Square::Empty => fmt.write_str("・"),
-            Square::HiddenTreasure => fmt.write_str("★ "),
+            Square::Empty | Square::HiddenTreasure => fmt.write_str("・"),
+            // Square::HiddenTreasure => fmt.write_str("★ "),
             Square::Taken => fmt.write_str("■ "),
             Square::Found => fmt.write_str("● "),
         }
@@ -33,13 +25,16 @@ impl fmt::Display for Square {
 
 fn main() {
     let mut rng = thread_rng();
+
     let mut v = vec![vec![Square::Empty; 10]; 10];
     let mut row = 0;
     let mut col = 0;
     v[row][col] = Square::Taken;
+
     let r = rng.gen_range(0..10);
     let c = rng.gen_range(0..10);
     v[r][c] = Square::HiddenTreasure;
+
     let state = get_current_state(&v);
 
     let stdin = stdin();
@@ -47,15 +42,15 @@ fn main() {
 
     write!(
         stdout,
-        "{}{}",
+        "{}{}row = {}, col = {}",
         cursor::Hide,
         state,
+        row,
+        col,
     )
     .unwrap();
 
     stdout.flush().unwrap();
-    println!("row = {}, col = {}", row, col);
-
 
     for c in stdin.keys() {
         v[row][col] = Square::Empty;
@@ -81,7 +76,7 @@ fn main() {
                 }
             }
             Key::Char('q') => break,
-            _ => ()
+            _ => (),
         }
 
         match v[row][col] {
@@ -90,42 +85,27 @@ fn main() {
                 let state = get_current_state(&v);
                 write!(
                     stdout,
-                    "{}",
-                    state,
+                    "{}row = {}, col = {}\n\rHidden treasure found!",
+                    state, row, col,
                 )
                 .unwrap();
-        
                 stdout.flush().unwrap();
-                println!("row = {}, col = {}", row, col);
-        
-
-                println!("\rHidden treasure found!");
                 break;
-            },
-            _ => (),
+            }
+            _ => {
+                v[row][col] = Square::Taken;
+                let state = get_current_state(&v);
+                write!(stdout, "{}row = {}, col = {}", state, row, col,).unwrap();
+                stdout.flush().unwrap();
+            }
         }
-
-        v[row][col] = Square::Taken;
-        let state = get_current_state(&v);
-
-        write!(
-            stdout,
-            "{}",
-            state,
-        )
-        .unwrap();
-
-        stdout.flush().unwrap();
-        println!("row = {}, col = {}", row, col);
-
     }
 
     write!(stdout, "{}", cursor::Show).unwrap();
 }
 
 fn get_current_state(v: &Vec<Vec<Square>>) -> String {
-    print!("\x1B[2J\x1B[1;1H");
-    let mut state = String::new();
+    let mut state = "\x1B[2J\x1B[1;1H".to_string();
     for row in v {
         for col in row {
             let f = format!("{}", col);
@@ -135,4 +115,3 @@ fn get_current_state(v: &Vec<Vec<Square>>) -> String {
     }
     state
 }
-

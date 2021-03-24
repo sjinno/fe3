@@ -16,18 +16,21 @@ use criterion::{black_box, criterion_group, criterion_main, Criterion};
 // }
 
 pub fn criterion_benchmark(c: &mut Criterion) {
-    c.bench_function("&str to String", |b| b.iter(|| {
-        let s = black_box("Hello, world!");
-        let s1 = black_box(s.to_string());
-        black_box(s1);
-    }));
-    c.bench_function("String to &str", |b| b.iter(|| {
-        let s = black_box(String::from("Hello, world!"));
-        let s1 = black_box(s.as_str());
-        black_box(s1);
-    }));
+    c.bench_function("&str to String", |b| {
+        b.iter(|| {
+            let s = black_box("Hello, world!");
+            let s1 = black_box(s.to_string());
+            black_box(s1);
+        })
+    });
+    c.bench_function("String to &str", |b| {
+        b.iter(|| {
+            let s = black_box(String::from("Hello, world!"));
+            let s1 = black_box(s.as_str());
+            black_box(s1);
+        })
+    });
 }
-
 
 // pub fn criterion_benchmark(c: &mut Criterion) {
 //     c.bench_function("Vec::new()", |b| b.iter(|| black_box(Vec::<usize>::new())));
