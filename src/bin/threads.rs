@@ -2,6 +2,8 @@ use std::sync::mpsc::channel;
 use std::thread;
 use std::time::Duration;
 
+use termion;
+
 pub fn thread1() {
     let t = thread::spawn(|| {
         for i in 1..10 {
