@@ -1,6 +1,8 @@
 use std::fmt;
 use std::io::{stdin, stdout, Write};
 
+
+use rand::{thread_rng, Rng};
 use termion::{
     event::Key,
     input::TermRead,
@@ -14,22 +16,30 @@ use termion::{
 enum Square {
     Empty,
     Taken,
+    HiddenTreasure,
+    Found,
 }
 
 impl fmt::Display for Square {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Square::Empty => fmt.write_str("・"),
+            Square::HiddenTreasure => fmt.write_str("★ "),
             Square::Taken => fmt.write_str("■ "),
+            Square::Found => fmt.write_str("● "),
         }
     }
 }
 
 fn main() {
+    let mut rng = thread_rng();
     let mut v = vec![vec![Square::Empty; 10]; 10];
     let mut row = 0;
     let mut col = 0;
     v[row][col] = Square::Taken;
+    let r = rng.gen_range(0..10);
+    let c = rng.gen_range(0..10);
+    v[r][c] = Square::HiddenTreasure;
     let state = get_current_state(&v);
 
     let stdin = stdin();
@@ -73,6 +83,28 @@ fn main() {
             Key::Char('q') => break,
             _ => ()
         }
+
+        match v[row][col] {
+            Square::HiddenTreasure => {
+                v[row][col] = Square::Found;
+                let state = get_current_state(&v);
+                write!(
+                    stdout,
+                    "{}",
+                    state,
+                )
+                .unwrap();
+        
+                stdout.flush().unwrap();
+                println!("row = {}, col = {}", row, col);
+        
+
+                println!("\rHidden treasure found!");
+                break;
+            },
+            _ => (),
+        }
+
         v[row][col] = Square::Taken;
         let state = get_current_state(&v);
 
