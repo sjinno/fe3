@@ -39,7 +39,7 @@ enum Direction {
     Right,
 }
 
-fn main() -> Result<(), Box<dyn Error>> {
+fn main() {
     let mut field = vec![vec![Cell::Empty; 10]; 10];
     let mut c = 0;
     let mut row = 5;
@@ -78,12 +78,12 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     loop {
         match event.recv().unwrap() {
-            Event::Tick => tick(&mut field, &mut c)?,
+            Event::Tick => tick(&mut field, &mut c),
             Event::Input(key) => match key {
-                Key::Left => shift(&mut field, Direction::Left, &mut row, &mut col)?,
-                Key::Right => shift(&mut field, Direction::Right, &mut row, &mut col)?,
-                Key::Up => shift(&mut field, Direction::Up, &mut row, &mut col)?,
-                Key::Down => shift(&mut field, Direction::Down, &mut row, &mut col)?,
+                Key::Left => shift(&mut field, Direction::Left, &mut row, &mut col),
+                Key::Right => shift(&mut field, Direction::Right, &mut row, &mut col),
+                Key::Up => shift(&mut field, Direction::Up, &mut row, &mut col),
+                Key::Down => shift(&mut field, Direction::Down, &mut row, &mut col),
                 Key::Char('q') => break,
                 _ => (),
             },
@@ -94,7 +94,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
 
     write!(stdout, "{}", cursor::Show).unwrap();
-    Ok(())
 }
 
 fn get_current_state(v: &Vec<Vec<Cell>>) -> String {
@@ -109,23 +108,13 @@ fn get_current_state(v: &Vec<Vec<Cell>>) -> String {
     state
 }
 
-fn tick(field: &mut Vec<Vec<Cell>>, c: &mut usize) -> Result<(), String> {
+fn tick(field: &mut Vec<Vec<Cell>>, c: &mut usize) {
     field[*c][*c] = Cell::Empty;
     *c += 1;
-    if field[*c][*c] == Cell::Circle {
-        field[*c][*c] = Cell::Block;
-        return Err("Ate food!".to_string());
-    }
     field[*c][*c] = Cell::Block;
-    Ok(())
 }
 
-fn shift(
-    field: &mut Vec<Vec<Cell>>,
-    d: Direction,
-    r: &mut usize,
-    c: &mut usize,
-) -> Result<(), String> {
+fn shift(field: &mut Vec<Vec<Cell>>, d: Direction, r: &mut usize, c: &mut usize) {
     field[*r][*c] = Cell::Empty;
     match d {
         Direction::Up => *r -= 1,
@@ -133,10 +122,5 @@ fn shift(
         Direction::Left => *c -= 1,
         Direction::Right => *c += 1,
     }
-    if field[*r][*c] == Cell::Block {
-        field[*r][*c] = Cell::Circle;
-        return Err("Caught block!".to_string());
-    }
     field[*r][*c] = Cell::Circle;
-    Ok(())
 }
